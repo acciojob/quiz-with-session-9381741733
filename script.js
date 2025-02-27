@@ -1,56 +1,65 @@
-//your JS code here.
+// Store user progress in session storage
+function saveProgress() {
+  const progress = {};
+  document.querySelectorAll("input[type='radio']:checked").forEach((input) => {
+    progress[input.name] = input.value;
+  });
+  sessionStorage.setItem("progress", JSON.stringify(progress));
+}
 
-// Do not change code below this line
-// This code will just display the questions to the screen
-const questions = [
-  {
-    question: "What is the capital of France?",
-    choices: ["Paris", "London", "Berlin", "Madrid"],
-    answer: "Paris",
-  },
-  {
-    question: "What is the highest mountain in the world?",
-    choices: ["Everest", "Kilimanjaro", "Denali", "Matterhorn"],
-    answer: "Everest",
-  },
-  {
-    question: "What is the largest country by area?",
-    choices: ["Russia", "China", "Canada", "United States"],
-    answer: "Russia",
-  },
-  {
-    question: "Which is the largest planet in our solar system?",
-    choices: ["Earth", "Jupiter", "Mars"],
-    answer: "Jupiter",
-  },
-  {
-    question: "What is the capital of Canada?",
-    choices: ["Toronto", "Montreal", "Vancouver", "Ottawa"],
-    answer: "Ottawa",
-  },
-];
+// Retrieve user progress from session storage
+function loadProgress() {
+  const progress = JSON.parse(sessionStorage.getItem("progress")) || {};
+  document.querySelectorAll("input[type='radio']").forEach((input) => {
+    if (progress[input.name] === input.value) {
+      input.checked = true;
+    }
+  });
+}
 
-// Display the quiz questions and choices
+// Submit quiz and calculate score
+function submitQuiz() {
+  let score = 0;
+  const progress = JSON.parse(sessionStorage.getItem("progress")) || {};
+
+  questions.forEach((q, index) => {
+    if (progress[`question-${index}`] === q.answer) {
+      score++;
+    }
+  });
+
+  localStorage.setItem("score", score);
+  document.getElementById("score").innerText = `Your score is ${score} out of 5.`;
+}
+
+// Render questions
 function renderQuestions() {
+  const questionsElement = document.getElementById("questions");
+  questionsElement.innerHTML = "";
+
   for (let i = 0; i < questions.length; i++) {
     const question = questions[i];
     const questionElement = document.createElement("div");
     const questionText = document.createTextNode(question.question);
     questionElement.appendChild(questionText);
+    
     for (let j = 0; j < question.choices.length; j++) {
       const choice = question.choices[j];
       const choiceElement = document.createElement("input");
       choiceElement.setAttribute("type", "radio");
       choiceElement.setAttribute("name", `question-${i}`);
       choiceElement.setAttribute("value", choice);
-      if (userAnswers[i] === choice) {
-        choiceElement.setAttribute("checked", true);
-      }
+      choiceElement.addEventListener("change", saveProgress);
+      
       const choiceText = document.createTextNode(choice);
       questionElement.appendChild(choiceElement);
       questionElement.appendChild(choiceText);
     }
+    
     questionsElement.appendChild(questionElement);
   }
+  loadProgress();
 }
+
+document.getElementById("submit").addEventListener("click", submitQuiz);
 renderQuestions();
