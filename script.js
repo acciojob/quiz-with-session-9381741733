@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Quiz questions and answers
     const questions = [
-        
         { question: "What is the capital of France?", options: ["London", "Paris", "Rome", "Berlin"], answer: 1 },
         { question: "What is the largest planet?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: 2 },
         { question: "What is H2O?", options: ["Oxygen", "Hydrogen", "Water", "Helium"], answer: 2 },
-        { question: "How many continents are there?", options: ["5", "6", "7", "8"], answer: 2 }
+        { question: "How many continents are there?", options: ["5", "6", "7", "8"], answer: 2 },
+        { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: 1 }
     ];
 
     const quizContainer = document.getElementById("questions");
