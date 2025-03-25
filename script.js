@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.getElementById("submit");
     const scoreDisplay = document.getElementById("score");
 
-    // Load previous score from local storage
+    // Load last stored score from local storage
     const savedScore = localStorage.getItem("score");
     if (savedScore !== null) {
         scoreDisplay.textContent = `Last Score: ${savedScore} out of 5`;
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 input.id = `q${index}_o${i}`;
 
                 // Restore saved answers from session storage
-                if (progress[index] == i) {
+                if (parseInt(progress[index]) === i) {
                     input.checked = true;
                 }
 
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let score = 0;
 
         questions.forEach((q, index) => {
-            if (progress[index] == q.answer) {
+            if (progress[index] !== undefined && parseInt(progress[index]) === q.answer) {
                 score++;
             }
         });
