@@ -19,10 +19,7 @@
                 { question: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "J.K. Rowling", "Mark Twain", "Ernest Hemingway"], answer: "Harper Lee" },
                 { question: "What is the largest planet in our solar system?", options: ["Earth", "Mars", "Jupiter", "Venus"], answer: "Jupiter" }
             ];
-
-            // Ensure questions render in a consistent order
-            questions = questions.sort((a, b) => a.question.localeCompare(b.question));
-
+            
             const questionContainer = document.getElementById("questions");
             const submitButton = document.getElementById("submit");
             const scoreDisplay = document.getElementById("score");
@@ -39,7 +36,8 @@
                     });
                     questionContainer.appendChild(questionDiv);
                 });
-                loadProgress();
+                
+                setTimeout(loadProgress, 50);
             }
 
             function saveProgress() {
@@ -50,12 +48,13 @@
                         progress[`question${index}`] = selectedOption.value;
                     }
                 });
-                console.log("Saved Progress:", progress); // Debugging
                 sessionStorage.setItem("progress", JSON.stringify(progress));
+                console.log("Saved Progress:", sessionStorage.getItem("progress"));
             }
 
             function loadProgress() {
                 const savedProgress = JSON.parse(sessionStorage.getItem("progress"));
+                console.log("Loaded Progress:", savedProgress);
                 if (savedProgress) {
                     Object.keys(savedProgress).forEach(key => {
                         const radioButton = document.querySelector(`input[name="${key}"][value="${savedProgress[key]}"]`);
@@ -74,17 +73,17 @@
                 });
                 localStorage.setItem("score", score);
                 scoreDisplay.textContent = `Your score is ${score} out of ${questions.length}.`;
+                console.log("Stored Score:", localStorage.getItem("score"));
             }
 
             questionContainer.addEventListener("change", saveProgress);
             submitButton.addEventListener("click", calculateScore);
-
+            
             loadQuiz();
-
-            // Load score if previously saved
+            
             const savedScore = localStorage.getItem("score");
             if (savedScore !== null) {
-                scoreDisplay.textContent = `Your score is ${savedScore} out of ${questions.length}.`;
+                scoreDisplay.textContent = `Your last score was ${savedScore} out of ${questions.length}.`;
             }
         });
     </script>
