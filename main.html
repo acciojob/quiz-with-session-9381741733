@@ -27,6 +27,7 @@
         const scoreDisplay = document.getElementById("score");
 
         function loadQuiz() {
+            questionsContainer.innerHTML = "";
             quizData.forEach((q, index) => {
                 const questionDiv = document.createElement("div");
                 questionDiv.innerHTML = `<p>${q.question}</p>`;
@@ -41,6 +42,7 @@
                 });
                 questionsContainer.appendChild(questionDiv);
             });
+            loadProgress();
         }
 
         function saveProgress() {
@@ -80,16 +82,19 @@
             calculateScore();
         });
 
-        questionsContainer.addEventListener("change", saveProgress);
+        questionsContainer.addEventListener("change", (event) => {
+            if (event.target.type === "radio") {
+                saveProgress();
+            }
+        });
 
-        loadQuiz();
-        loadProgress();
-
-        // Display stored score if exists
-        const storedScore = localStorage.getItem("score");
-        if (storedScore !== null) {
-            scoreDisplay.innerText = `Your last score was ${storedScore} out of 5.`;
-        }
+        window.addEventListener("load", () => {
+            loadQuiz();
+            const storedScore = localStorage.getItem("score");
+            if (storedScore !== null) {
+                scoreDisplay.innerText = `Your last score was ${storedScore} out of 5.`;
+            }
+        });
     </script>
 </body>
 </html>
